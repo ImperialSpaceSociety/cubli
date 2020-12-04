@@ -1,20 +1,20 @@
+%% setinput function
+% input:
+% pos: time index
+% output:
+% no output, but the current input value is stored in cubli.params.u
 function set_input(pos)
 
+    % global struct with simulation data
     global cubli
         
-    % system control input
+    % check if control input is enabled. if this is the case the 
+    % input is set as the value defined in cubli_init.m (cubli.params.U vector). 
+    % Otherwise set the input to zero
     if cubli.input_flag == 1
         cubli.params.u = cubli.params.U(pos);
     else
         cubli.params.u = 0;
     end
     
-    % check if stop is an option
-    time_index = pos-1;
-    if  (abs(cubli.stateStory(3,time_index)) <= cubli.zero_thresh_vel)
-        cubli.stateStory(3,time_index) = 0;
-        cubli.stop_flag = 1;
-    else
-        cubli.stop_flag = 0;
-    end
 end
