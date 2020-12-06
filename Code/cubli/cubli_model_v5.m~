@@ -21,18 +21,12 @@ function x_dot = cubli_model_v5(t,x)
             rebounce_factor = 0;
         end
         
-        if cubli.x_old(1) > 0
+        if x(1) > 0
             if rebounce_factor ~= 0
                 angle = (1-2*cubli.zero_thresh_angle)*cubli.hit_angle;
-            else
-                angle = cubli.hit_angle;
-            end
+                e
         else
-            if rebounce_factor ~= 0
-                angle = (1-2*cubli.zero_thresh_angle)*(cubli.hit_angle-pi);
-            else
-                angle = (cubli.hit_angle-pi);
-            end
+            angle = (1-2*cubli.zero_thresh_angle)*(cubli.hit_angle-pi);
         end
         
         % hybrid model - hit the ground
@@ -40,9 +34,10 @@ function x_dot = cubli_model_v5(t,x)
         
         x_dot(2) = x(4);
         
-        x_dot(3) = -cubli.x_old(3)*rebounce_factor/cubli.simulation.Ts + (-cubli.params.u + cubli.params.Fw*x(4))/cubli.params.If;
+        x_dot(3) = -cubli.x_old(3)*rebounce_factor/cubli.simulation.Ts;
         
-        x_dot(4) = (cubli.params.u*(cubli.params.If + cubli.params.Iw) - cubli.params.Fw*x(4)*(cubli.params.If + cubli.params.Iw) - cubli.params.Lt*cubli.params.M*cubli.params.g*sin(x(1))*cubli.params.Iw...
+        x_dot(4) = (cubli.params.u*(cubli.params.If + cubli.params.Iw) - cubli.params.Fw*x(4)*(cubli.params.If + cubli.params.Iw)...
+                    - cubli.params.Lt*cubli.params.M*cubli.params.g*cos(x(1))*cubli.params.Iw...
                     + cubli.params.Fc*x(3)*cubli.params.Iw)/(cubli.params.If*cubli.params.Iw);
         
     else

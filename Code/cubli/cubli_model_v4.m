@@ -3,7 +3,7 @@
 % x(2) = flywheel angular position
 % x(3) = face angular velocity
 % x(4) = flywheel angular velocity
-function x_dot = cubli_model_v3(t,x)
+function x_dot = cubli_model_v4(t,x)
 
     global cubli
     x_dot = zeros(length(x),1);

@@ -22,23 +22,13 @@ cubli.stateStory(:,1) = cubli.init_condition;
 disp('Model simulation')
 
 % model integration
-k = 2;
-while k<=cubli.simulation.Niter
-    
-    % current time index
-    cubli.iteration = k;
+for cubli.iteration=2:cubli.simulation.Niter 
     
     % system control input
     set_input(cubli.iteration);
     
     % propagate 
-    cubli.stateStory(:,cubli.iteration) = PlantJumpMap_hybrid(cubli.stateStory(:,cubli.iteration-1),cubli.simulation.model,1);
-    if cubli.hit == 1
-        cubli.stateStory(:,cubli.iteration-1) = cubli.stateStory(:,cubli.iteration);
-        cubli.hit = 0;
-    end
-    
-    k = cubli.iteration+1;
+    cubli.stateStory(:,k) = PlantJumpMap_general_notime(cubli.stateStory(:,k-1),cubli.simulation.model,1);            
 end       
 
 % compute the coordinates of the center of mass from state variable

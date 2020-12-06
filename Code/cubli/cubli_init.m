@@ -34,15 +34,17 @@ cubli.params.Km = 1;
 % these values define when the Cubli hits the ground and when to saturate
 % the velocities to zero
 cubli.hit_angle = pi/2;
-cubli.zero_thresh_angle = 1e-4;
+cubli.zero_thresh_angle = 1e-3;
+cubli.zero_thresh_vel = 5e0;
+cubli.hit = 0;
 
 % simulation data
 % initial time instant
 cubli.simulation.Tstart = 0;
 % final time instant
-cubli.simulation.Tend = 10;
+cubli.simulation.Tend = 1;
 % simulation integration step
-cubli.simulation.Ts = 1e-2;
+cubli.simulation.Ts = 1e-3;
 % total time vector
 cubli.simulation.time = cubli.simulation.Tstart:cubli.simulation.Ts:cubli.simulation.Tend;
 % number of integration step
@@ -55,20 +57,18 @@ cubli.simulation.model = @cubli_model_v5;
 cubli.StateDim = 4;
 
 % Cubli initial condition
-cubli.init_condition = [-pi/4; 0; 0; 0];
+cubli.init_condition = [-pi/2; 0; 0; 0];
 
 % input flag (1:enabled, 0:disabled)
-cubli.input_flag = 0;
+cubli.input_flag = 1;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % CONTROL SIGNALS: select one for testing
 
-% sinusoid
-% cubli.params.Tm = cubli.params.Km*sin(20*cubli.simulation.time);
-
 % step
-init_step = 100;
-cubli.params.Tm = sign(cubli.init_condition(1))*1.2e1*cubli.params.Km*[zeros(1,init_step), ones(1,init_step), zeros(1,cubli.simulation.Niter-2*init_step)];
+init_step = 3;
+step_shift = 20;
+cubli.params.Tm = 2e1*sign(cubli.init_condition(1))*cubli.params.Km*[zeros(1,step_shift*init_step), ones(1,init_step), zeros(1,cubli.simulation.Niter-(step_shift+1)*init_step)];
 
 % pwm
 % cubli.params.fc = 0.5;
