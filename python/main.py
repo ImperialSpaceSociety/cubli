@@ -1,11 +1,12 @@
 import numpy as np
-from matplotlib import pyplot as plt
-from numpy import pi
+from plotting import plotTimeSeries
+from cubli import CubliV1
 
 
-class Cubli:
-    params = {
-        'Lt': 0.085,
+def main():
+    Lt: float = 0.085
+    cubli = CubliV1(params={
+        'Lt': Lt,
         'M': 0.419,
         'g': 9.81,
         'Fw': 0.05e-3,
@@ -13,41 +14,16 @@ class Cubli:
         'If': 3.34e-3,
         'Iw': 0.57e-3,
         'Km': 1.0,
-        'u': 0.0
-    }
-    params['COM'] = params['Lt']*np.sqrt(2)
+        'u': 0.0,
+        'COM': Lt*np.sqrt(2)
+    })
+    t_start: float = 0.0
+    t_end: float = 50.0
+    dt: float = 1e-3
+    x_0: np.ndarray = np.array([0.01, 0.0, 0.0, 0.0])
 
-    def iterate(self, x):
-        x_dot = np.zeros(4)
-        x_dot[0] = x[2]
-        x_dot[1] = x[3]
-
-        x_dot[2] = (self.params['Lt']*self.params['M']*self.params['g']*np.sin(x[0])) - self.params['u'] + self.params['Fw']*x[3] - self.params['Fc']*x[2]/self.params['If']
-
-        x_dot[3] = (self.params['u']*(self.params['If'] + self.params['Iw']) - \
-                   self.params['Fw']*x[3]*(self.params['If'] + self.params['Iw']) - \
-                   self.params['Lt']*self.params['M']*self.params['g']*np.sin(x[0])*self.params['Iw'] + \
-                   self.params['Fc']*x[2]*self.params['Iw'])/(self.params['If']*self.params['Iw'])
-        return x_dot
-
-
-def main():
-    cubli = Cubli()
-    print(cubli.params)
-    t_start = 0
-    t_end = 50
-    dt = 1e-3
-    N_iter = int((t_end - t_start)/dt)
-
-    initial_condition = (0.01, 0.0, 0.0, 0.0)
-
-    x = np.zeros((N_iter, 4))
-    x[0] = initial_condition
-    for i in range(1, N_iter):
-        x[i] = x[i-1] + dt * cubli.iterate(x[i-1])
-    print(x)
-    plt.plot(x[:, 0])
-    plt.show()
+    x = cubli.run(t_start, t_end, dt, x_0)
+    plotTimeSeries(x, dt)
 
 
 if __name__ == '__main__':
