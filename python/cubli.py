@@ -17,8 +17,8 @@ class CubliBase:
     def run(self, t_start: float, t_end: float, dt: float, x_0: np.ndarray) -> np.ndarray:
         N_iter: int = int((t_end - t_start)/dt)
         x: np.ndarray = np.zeros((N_iter, 4))
-        x[0] = x_0
-        for i in range(1, N_iter):
+        x[0] = x_0  # Set initial conditions
+        for i in range(1, N_iter):  # Iterate through time
             x[i] = x[i-1] + dt * self.iterate(x[i-1])
         return x
 
