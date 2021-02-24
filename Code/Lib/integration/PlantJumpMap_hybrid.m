@@ -11,7 +11,7 @@ x0 = X(1:cubli.StateDim);
 tjunk = 0;
 cubli.x_old = x0;
 
-if (x0(1) >= cubli.hit_angle || x0(1) <= (cubli.hit_angle-pi)) 
+if (x0(1) >= cubli.hit_angle || x0(1) <= (cubli.hit_angle-pi)) && (cubli.brake == 0)
     cubli.hit = 1;
     x0(1) = 0;
     x0(3) = 0;

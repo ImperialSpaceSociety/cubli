@@ -34,48 +34,36 @@ cubli.params.Km = 1e0;
 % these values define when the Cubli hits the ground and when to saturate
 % the velocities to zero
 cubli.hit_angle = pi/2;
-cubli.zero_thresh_angle = 1e-3;
-cubli.zero_thresh_vel = 5e0;
+cubli.zero_thresh_angle = 1e-2;
+cubli.zero_thresh_vel = 1e-2;
 cubli.hit = 0;
+cubli.stop = 0;
 
 % simulation data
 % initial time instant
 cubli.simulation.Tstart = 0;
 % final time instant
-cubli.simulation.Tend = 2;
+cubli.simulation.Tend = 10;
 % simulation integration step
-cubli.simulation.Ts = 1e-3;
+cubli.simulation.Ts = 5e-2;
 % total time vector
 cubli.simulation.time = cubli.simulation.Tstart:cubli.simulation.Ts:cubli.simulation.Tend;
 % number of integration step
 cubli.simulation.Niter = length(cubli.simulation.time);
 
 % cubli model version (see the related file)
-cubli.simulation.model = @cubli_model_v5;
+cubli.simulation.model = @cubli_model;
 
 % number of states (position and velocity for both frame and wheel)
 cubli.StateDim = 4;
 
 % Cubli initial condition
-cubli.init_condition = [-pi/2; 0; 0; 0];
+cubli.init_condition = [-pi/4; 0; 0; 0];
 
 % input flag (1:enabled, 0:disabled)
-cubli.input_flag = 1;
-cubli.target_angle = 0;
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% CONTROL SIGNALS: select one for testing
-
-% step
-init_step = 100;
-mul_factor = 1.82e1;
-step_shift = 1000;
-ramp = -sign(cubli.init_condition(1))*linspace(0,mul_factor,step_shift);
-% cubli.params.Tm = mul_factor*sign(cubli.init_condition(1))*cubli.params.Km*[zeros(1,step_shift*init_step), ones(1,init_step), zeros(1,cubli.simulation.Niter-(step_shift+1)*init_step)];
-% cubli.params.Tm = mul_factor*sign(cubli.init_condition(1))*[ones(1,step_shift*init_step), zeros(1,init_step), zeros(1,cubli.simulation.Niter-(step_shift+1)*init_step)];
-cubli.params.Tm = [ramp, ramp(end)*ones(1,init_step), zeros(1,cubli.simulation.Niter-(step_shift+init_step))];
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-% input actual signal
-cubli.params.U = cubli.params.Tm;
+cubli.input_flag = 0;
+cubli.brake_torque = 1e3;
+cubli.input_story = 0;
+% cubli.target_angle = 0;
+% cubli.jump_flag = 0;
+% cubli.brake = 0;

@@ -14,14 +14,10 @@ if 1
     for i=1:cubli.StateDim
     
     	% create a subplot in the figure window (4 subplots if no input, 5 otherwise)
-        if cubli.input_flag == 1
-            ax(i)=subplot(cubli.StateDim+1,1,i);
-        else
-            ax(i)=subplot(cubli.StateDim,1,i);
-        end
+        ax(i)=subplot(cubli.StateDim+1,1,i);
         
         % actual data plot
-        plot(cubli.simulation.time,cubli.stateStory(i,:),'LineWidth',2);
+        plot(cubli.simulation.time,cubli.stateStory(:,i),'LineWidth',2);
         
         % enable the grid on the subplot
         grid on
@@ -33,21 +29,19 @@ if 1
     end
     
     % plot input if present
-    if cubli.input_flag == 1
     	
-    	% add a subplot for the input
-        ax(i)=subplot(cubli.StateDim+1,1,cubli.StateDim+1);
-        
-        % enable grid on the subplot
-        grid on
-        
-        % actual data plot
-        plot(cubli.simulation.time,cubli.params.U,'LineWidth',2);
-        
-        % set title and legend
-        title('Simulation test ')
-        legend('input');
-    end
+    % add a subplot for the input
+    ax(i)=subplot(cubli.StateDim+1,1,cubli.StateDim+1);
+
+    % enable grid on the subplot
+    grid on
+
+    % actual data plot
+    plot(cubli.input_story,'LineWidth',2);
+
+    % set title and legend
+    title('Simulation test ')
+    legend('input');
 end
 
 % set to zero to disable this set of plots
